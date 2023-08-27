@@ -1,12 +1,12 @@
 mod nec1;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct IRResultData {
     pub function: usize,
     pub device: usize,
-    pub subdevice: usize,
 }
 
+#[derive(Debug, PartialEq)]
 pub enum IRResult {
     Data(IRResultData),
     Repeat,
@@ -25,7 +25,7 @@ impl IRDecoder {
     }
 
     pub fn decode(&mut self, raw_ir: &str) -> &Option<IRResultData> {
-        let ir_decoded = nec1::nec_decoder(raw_ir);
+        let ir_decoded = nec1::nec1_decoder(raw_ir);
         match ir_decoded {
             IRResult::Data(data) => {
                 self.last_message = Some(data);
