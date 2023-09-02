@@ -32,7 +32,7 @@ impl IRDecoder {
         match ir_decoded {
             IRResult::Data(data) => {
                 self.last_message = Some(data);
-                self.count += 1;
+                self.count = 0;
                 (&self.last_message,self.count)
             },
             IRResult::Repeat => {
