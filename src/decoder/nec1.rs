@@ -4,13 +4,15 @@ use super::{IRResultData, IRResult};
 pub fn nec1_decoder(str: &str) -> IRResult {
     let (tolerance, relative_tolerance, max_gap) = (200,30,11000);
     
-    let rawir = InfraredData::from_rawir(&str.replace("# timeout ", "-")).unwrap();
+    let rawir = match InfraredData::from_rawir(&str.replace("# timeout ", "-")) {
+        Ok(a) => a,
+        _ => return IRResult::Unknown,
+    };
+    
     
     if check_repeat(&rawir, tolerance) {
         return IRResult::Repeat;
     }
-
-
 
     //IRP notation for NEC protocol
     let nec_irp = Irp::parse(r#"{38.4k,564}<1,-1|1,-3>(16,-8,D:8,S:8,F:8,~F:8,1,^108m,(16,-4,1,^108m)*)[D:0..255,S:0..255=255-D,F:0..255]"#)
