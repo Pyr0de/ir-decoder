@@ -1,10 +1,12 @@
-pub mod decoder;
+mod decoder;
+
+pub use decoder::IRResultData;
 
 use std::{process::{Command, Stdio}, io::{BufReader, BufRead}};
 
-use decoder::{IRResultData, IRDecoder}; 
+use decoder::IRDecoder;
 
-pub fn start(call: fn(&IRResultData, usize)) {
+pub fn start<F: Fn(&IRResultData, usize)>(call: F) {
     let mut ir_ctl_child = Command::new("ir-ctl")
         .arg("-r")
         .stdout(Stdio::piped())
